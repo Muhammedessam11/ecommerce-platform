@@ -1,8 +1,19 @@
-FROM node:16-alpine
+FROM node:16
+
 WORKDIR /app
+
 COPY package.json package-lock.json ./
-RUN npm install
+
+# Clear npm cache and set registry
+RUN npm cache clean --force && npm config set registry https://registry.npmjs.org/
+
+# Update npm and install dependencies
+RUN npm install -g npm@latest && npm install
+
 COPY . .
+
 EXPOSE 5000
-CMD ["node", "app.js"]
+
+CMD ["npm", "start"]
+
 
